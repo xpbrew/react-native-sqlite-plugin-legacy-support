@@ -81,6 +81,8 @@ compile project(':react-native-sqlite-plugin-legacy-support')
 
 # Usage
 
+**Option 1:**
+
 ```javascript
 import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
 
@@ -91,6 +93,23 @@ db.transaction((tx) => {
     this.setState({
       ...this.state,
       upperText: rs.rows.item(0).upperText
+    });
+  });
+});
+```
+
+**Option 2:**
+
+```javascript
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
+
+sqlitePlugin.openDatabase({name:'demo.db', location: 'default'}, (db) => {
+  db.transaction((tx) => {
+    tx.executeSql('SELECT UPPER(?) as upperText', ['Some ASCII text'], (tx, rs) => {
+      this.setState({
+        ...this.state,
+        upperText: rs.rows.item(0).upperText
+      });
     });
   });
 });
@@ -175,6 +194,7 @@ const styles = StyleSheet.create({
 })
 ```
 
+<!-- TBD ???:
 # Original documentation based on Cordova plugin
 
 **IMPORTANT NOTICE:** On React Native the `sqlitePlugin` object must be imported as documented above and used instead of `window.sqlitePlugin`. And there is no `deviceready` event to wait for on React Native.
@@ -198,6 +218,7 @@ __BREAKING CHANGE under consideration:__
 This is a common plugin version branch which supports the most widely used features and serves as the basis for other plugin versions.
 
 This version branch uses a `before_plugin_install` hook to install sqlite3 library dependencies from `cordova-sqlite-storage-dependencies` via npm.
+-->
 
 <!-- XXX TBD WORKING CI WANTED in the future:
 |Android Circle-CI (**full** suite)|iOS Travis-CI (partial suite)|
@@ -209,6 +230,16 @@ This version branch uses a `before_plugin_install` hook to install sqlite3 libra
 
 <!-- END About this plugin version branch -->
 
+## General notes
+
+This documentation is based on the Cordova plugin version, with some quick updates to reflect the most important changes for React Native.
+
+The most important differences:
+
+- installation (see above)
+- must import `sqlitePlugin` as described above (no `window.sqlitePlugin` on React Native)
+- there is no `deviceready` event to wait for on React Native
+
 ## WARNING: Multiple SQLite problem on multiple platforms
 
 ### Multiple SQLite problem on Android
@@ -218,7 +249,8 @@ This plugin uses a non-standard [Android-sqlite-connector](https://github.com/li
 The workaround is to use the `androidDatabaseProvider: 'system'` setting as described in the [Android database provider](#android-database-provider) section below:
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
+
 var db = sqlitePlugin.openDatabase({
   name: 'my.db',
   location: 'default',
@@ -232,6 +264,7 @@ This plugin version also uses a fixed version of sqlite3 on iOS, macOS, and Wind
 
 <!-- END WARNING: Multiple SQLite problem -->
 
+<!--
 ## Available for hire
 
 The primary author and maintainer [@brodybits (Christopher J. Brody aka Chris Brody)](https://github.com/brodybits) is available for part-time contract assignments. Services available for this project include:
@@ -250,6 +283,7 @@ Other services available include:
 For more information:
 - <https://xpbrew.consulting>
 - <sales@xpbrew.consulting>
+-->
 
 <!-- END Services available -->
 
@@ -258,15 +292,13 @@ For more information:
 To open a database:
 
 ```Javascript
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
 
 var db = null;
 
-document.addEventListener('deviceready', function() {
-  db = sqlitePlugin.openDatabase({
+db = sqlitePlugin.openDatabase({
     name: 'my.db',
     location: 'default',
-  });
 });
 ```
 
@@ -476,6 +508,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 
 ## Getting started
 
+<!--
 ### Recommended prerequisites
 
 - Install a recent version of Cordova CLI, create a simple app with no plugins, and run it on the desired target platforms.
@@ -530,7 +563,9 @@ and limit database access to DRAFT standard transactions, no plugin-specific API
 This kind of usage on Safari and Chrome desktop browser (with (WebKit) Web SQL) is now covered by the `spec` test suite.
 
 It would be ideal for the application code to abstract the part with the `openDatabase()` call away from the rest of the database access code.
+-- -->
 
+<!--
 ### Windows platform notes
 
 Use of this plugin on the Windows platform is not always straightforward, due to the need to build the internal SQLite3 C++ library. The following tips are recommended for getting started with Windows:
@@ -569,6 +604,7 @@ cordova prepare android
 Please see the [Installing](#installing) section for more details.
 
 **NOTE:** The new [brodybits / cordova-sqlite-test-app](https://github.com/brodybits/cordova-sqlite-test-app) project includes the echo test, self test, and string test described below along with some more sample functions.
+-- -->
 
 <!-- END Quick installation -->
 
@@ -579,25 +615,21 @@ Try the following programs to verify successful installation and operation:
 **Echo test** - verify successful installation and build:
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
 
-// document.addEventListener('deviceready', function() {
-  sqlitePlugin.echoTest(function() {
+sqlitePlugin.echoTest(function() {
     console.log('ECHO test OK');
-  });
-// });
+});
 ```
 
 **Self test** - automatically verify basic database access operations including opening a database; basic CRUD operations (create data in a table, read the data from the table, update the data, and delete the data); close and delete the database:
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
 
-/* document.addEventListener('deviceready', function() */ {
   sqlitePlugin.selfTest(function() {
     console.log('SELF test OK');
   });
-});
 ```
 
 **NOTE:** It may be easier to use a JavaScript or native `alert` function call along with (or instead of) `console.log`  to verify that the installation passes both tests. Same for the SQL string test variations below. (Note that the Windows platform does not support the standard `alert` function, please use `cordova-plugin-dialogs` instead.)
@@ -607,10 +639,9 @@ Try the following programs to verify successful installation and operation:
 This test verifies that you can open a database, execute a basic SQL statement, and get the results (should be `TEST STRING`):
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
 
-/* document.addEventListener('deviceready', function() */ {
-  var db = sqlitePlugin.openDatabase({name: 'test.db', location: 'default'});
+sqlitePlugin.openDatabase({name: 'demo.db', location: 'default'}, (db) =>
   db.transaction(function(tr) {
     tr.executeSql("SELECT upper('Test string') AS upperString", [], function(tr, rs) {
       console.log('Got upperString result: ' + rs.rows.item(0).upperString);
@@ -622,16 +653,14 @@ This test verifies that you can open a database, execute a basic SQL statement, 
 Here is a variation that uses a SQL parameter instead of a string literal:
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
 
-/* document.addEventListener('deviceready', function() */ {
-  var db = sqlitePlugin.openDatabase({name: 'test.db', location: 'default'});
+sqlitePlugin.openDatabase({name: 'demo.db', location: 'default'}, (db) =>
   db.transaction(function(tr) {
     tr.executeSql('SELECT upper(?) AS upperString', ['Test string'], function(tr, rs) {
       console.log('Got upperString result: ' + rs.rows.item(0).upperString);
     });
   });
-});
 ```
 
 ### Moving forward
@@ -977,7 +1006,7 @@ FUTURE TBD: Proper date/time handling will be further tested and documented at s
 To verify that both the Javascript and native part of this plugin are installed in your application:
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
 
 sqlitePlugin.echoTest(successCallback, errorCallback);
 ```
@@ -985,7 +1014,7 @@ sqlitePlugin.echoTest(successCallback, errorCallback);
 To verify that this plugin is able to open a database (named `___$$$___litehelpers___$$$___test___$$$___.db`), execute the CRUD (create, read, update, and delete) operations, and clean it up properly:
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
 
 sqlitePlugin.selfTest(successCallback, errorCallback);
 ```
@@ -1007,7 +1036,8 @@ See the [Sample section](#sample) for a sample with detailed explanations.
 To open a database access handle object (in the **new** default location):
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
+
 var db = sqlitePlugin.openDatabase({name: 'my.db', location: 'default'}, successcb, errorcb);
 ```
 
@@ -1018,7 +1048,8 @@ var db = sqlitePlugin.openDatabase({name: 'my.db', location: 'default'}, success
 To specify a different location (affects iOS/macOS *only*):
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
+
 var db = sqlitePlugin.openDatabase({name: 'my.db', iosDatabaseLocation: 'Library'}, successcb, errorcb);
 ```
 
@@ -1057,7 +1088,8 @@ function onDeviceReady() {
 The successcb and errorcb callback parameters are optional but can be extremely helpful in case anything goes wrong. For example:
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
+
 sqlitePlugin.openDatabase({name: 'my.db', location: 'default'}, function(db) {
   db.transaction(function(tx) {
     // ...
@@ -1130,7 +1162,8 @@ Use the `location` or `iosDatabaseLocation` option in `sqlitePlugin.openDatabase
 By default, this plugin uses [Android-sqlite-connector](https://github.com/liteglue/Android-sqlite-connector), which is lightweight and should be more efficient than the Android system database provider. To use the built-in Android system database provider implementation instead:
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
+
 var db = sqlitePlugin.openDatabase({
   name: 'my.db',
   location: 'default',
@@ -1159,7 +1192,8 @@ This is *not* an issue when the default [Android-sqlite-connector](https://githu
 There is an optional workaround that simply closes and reopens the database file at the end of every transaction that is committed. The workaround is enabled by opening the database with options as follows:
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
+
 var db = sqlitePlugin.openDatabase({
   name: 'my.db',
   location: 'default',
@@ -1389,14 +1423,8 @@ The threading model depends on which platform version is used:
 Creates a table, adds a single entry, then queries the count to check if the item was inserted as expected. Note that a new transaction is created in the middle of the first callback.
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
 
-// not needed for React Native:
-// Wait for Cordova to load
-document.addEventListener('deviceready', onDeviceReady, false);
-
-// Cordova is ready
-/* function onDeviceReady() */ {
   var db = sqlitePlugin.openDatabase({name: 'my.db', location: 'default'});
 
   db.transaction(function(tx) {
@@ -1423,7 +1451,6 @@ document.addEventListener('deviceready', onDeviceReady, false);
       console.log("ERROR: " + e.message);
     });
   });
-}
 ```
 
 **NOTE:** PRAGMA statements must be executed in `executeSql()` on the database object (i.e. `db.executeSql()`) and NOT within a transaction.
@@ -1435,14 +1462,8 @@ document.addEventListener('deviceready', onDeviceReady, false);
 In this case, the same transaction in the first executeSql() callback is being reused to run executeSql() again.
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
 
-// not needed for React Native:
-// Wait for Cordova to load
-document.addEventListener('deviceready', onDeviceReady, false);
-
-// Cordova is ready
-/* function onDeviceReady() */ {
   var db = sqlitePlugin.openDatabase({name: 'my.db', location: 'default'});
 
   db.transaction(function(tx) {
@@ -1462,7 +1483,6 @@ document.addEventListener('deviceready', onDeviceReady, false);
       console.log("ERROR: " + e.message);
     });
   });
-}
 ```
 
 This case will also works with Safari (WebKit), assuming you replace `sqlitePlugin.openDatabase` with `window.openDatabase`.
@@ -1544,7 +1564,8 @@ db.executeSql("SELECT LENGTH('tenletters') AS stringlength", [], function (res) 
 ## Delete a database
 
 ```js
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
+
 sqlitePlugin.deleteDatabase({name: 'my.db', location: 'default'}, successcb, errorcb);
 ```
 
@@ -1666,7 +1687,7 @@ Use `sqlitePlugin.echoTest` and/or `sqlitePlugin.selfTest` as described above (p
 Assuming your app has a recent template as used by the Cordova create script, add the following code to the `onDeviceReady` function, after `app.receivedEvent('deviceready');`:
 
 ```Javascript
-  // must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
 
   sqlitePlugin.openDatabase({ name: 'hello-world.db', location: 'default' }, function (db) {
     db.executeSql("select length('tenletters') as stringlength", [], function (res) {
@@ -1817,7 +1838,7 @@ The SQLite storage plugin sample allows you to execute SQL statements to interac
 Call the `openDatabase()` function to get started, passing in the name and location for the database.
 
 ```Javascript
-// must import sqlitePlugin as described above
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
 
 var db = sqlitePlugin.openDatabase({ name: 'my.db', location: 'default' }, function (db) {
 
