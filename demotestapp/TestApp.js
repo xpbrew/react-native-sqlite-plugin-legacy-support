@@ -47,7 +47,7 @@ export default class TestApp extends Component<{}> {
         ...this.state,
         estatus: 'echo ok'
       });
-      const db = sqlitePlugin.openDatabase({name:'demo-test.db', location: 'default'}, () => {
+      sqlitePlugin.openDatabase({name:'demo-test.db', location: 'default'}, (db) => {
         this.setState({
           ...this.state,
           dbstatus: 'open db ok'

@@ -46,8 +46,8 @@
     "test": "echo 'npm test is not supported' && npm run spec-help && exit 1"
   },
   "peerDependencies": {
-    "react": "^16.6.3",
-    "react-native": "^0.58.6"
+    "react": "^16.8.3",
+    "react-native": "^0.59.0"
   },
   "dependencies": {
     "cordova-sqlite-storage-dependencies": "2.0.0"
@@ -56,7 +56,7 @@
     "coffeescript": "1",
     "cross-spawn": "^6.0.5",
     "fs-extra": "^7.0.1",
-    "react": "^16.6.3",
-    "react-native": "^0.58.6"
+    "react": "^16.8.3",
+    "react-native": "^0.59.0"
   }
 }
