@@ -27,12 +27,29 @@ The primary author and maintainer [@brodybits (Chris Brody)](https://github.com/
 
 # Getting started on React Native
 
-`$ npm install react-native-sqlite-plugin-legacy-support --save`
+## Demo app
 
-### Mostly automatic installation
+- <https://github.com/brodybits/react-native-sqlite-plugin-legacy-demo>
+
+## Adding to an existing React Native project
+
+NOTE that using the Yarn tool is HIGHLY RECOMMENDED. Use without Yarn is NOT TESTED AND NOT SUPPORTED.
+
+Add to an existing React Native project as follows:
+
+```sh
+yarn add https://github.com/brodybits/react-native-sqlite-plugin-legacy-support
+```
+
+<!-- ALTERNATIVE THAT IS NOT TESTED AND NOT SUPPORTED:
+`$ npm install react-native-sqlite-plugin-legacy-support --save`
+-- -->
+
+and then continue with the following "mostly automatic installation" command:
 
 `$ react-native link react-native-sqlite-plugin-legacy-support`
 
+<!-- NOT TESTED AND NOT SUPPORTED:
 ### Manual installation
 
 NOTE THAT MANUAL INSTALLATION OF THIS REACT NATIVE MODULE IS NOT TESTED AND NOT SUPPORTED.
@@ -60,6 +77,7 @@ project(':react-native-sqlite-plugin-legacy-support').projectDir = new File(root
 ```
 compile project(':react-native-sqlite-plugin-legacy-support')
 ```
+- -->
 
 # Usage
 
