@@ -1,6 +1,6 @@
 {
   "name": "react-native-sqlite-plugin-legacy-support",
-  "title": "React Native SQLite Plugin legacy support under development (known to be missing some needed components)",
+  "title": "React Native SQLite Plugin legacy support",
   "version": "0.0.1-dev",
   "description": "Native interface to SQLite for React Native - react-native-sqlite-plugin-legacy-support version",
   "main": "index.js",

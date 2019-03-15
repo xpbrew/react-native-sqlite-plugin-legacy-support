@@ -1,4 +1,4 @@
-# Cross-platform SQLite storage plugin for React Native - react-native-sqlite-plugin-legacy-support version - known to be missing some needed components
+# Cross-platform SQLite storage plugin for React Native - react-native-sqlite-plugin-legacy-support version
 
 Native SQLite component with API based on HTML5/[Web SQL (DRAFT) API](http://www.w3.org/TR/webdatabase/) for the following platforms:
 - Android
@@ -17,9 +17,11 @@ Browser platform is currently supported with some limitations as described in [b
 
 __WARNING: Multiple SQLite problem on all platforms__ _with possible corruption risk in case of sqlite access from multiple plugins (see below)_
 
+<!--
 # FREE CONSULTING SPECIAL
 
 The primary author and maintainer [@brodybits (Chris Brody)](https://github.com/brodybits) is happy to offer free consulting for a limited time period - please see <https://xpbrew.consulting> for more information.
+-->
 
 <!-- Installation & usage instructions as generated: -->
 
