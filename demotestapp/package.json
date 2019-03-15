@@ -10,7 +10,7 @@
   "dependencies": {
     "react": "16.8.3",
     "react-native": "0.59.1",
-    "react-native-sqlite-plugin-support": "file:../"
+    "react-native-sqlite-plugin-legacy-support": "file:../"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",

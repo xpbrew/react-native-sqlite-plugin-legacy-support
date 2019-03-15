@@ -1,8 +1,8 @@
 {
-  "name": "react-native-sqlite-plugin-support-dev",
-  "title": "React Native SQLite Plugin support under development (known to be missing some needed components)",
+  "name": "react-native-sqlite-plugin-legacy-support",
+  "title": "React Native SQLite Plugin legacy support under development (known to be missing some needed components)",
   "version": "0.0.1-dev",
-  "description": "Native interface to SQLite for React Native - react-native-sqlite-plugin-support-dev version branch",
+  "description": "Native interface to SQLite for React Native - react-native-sqlite-plugin-legacy-support version",
   "main": "index.js",
   "cordova": {
     "id": "react-native-sqlite-plugin-support-dev",
@@ -15,8 +15,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/brodybits/react-native-sqlite-plugin-support-dev.git",
-    "baseUrl": "https://github.com/brodybits/react-native-sqlite-plugin-support-dev"
+    "url": "git+https://github.com/brodybits/react-native-sqlite-plugin-legacy-support.git",
+    "baseUrl": "https://github.com/brodybits/react-native-sqlite-plugin-legacy-support"
   },
   "keywords": [
     "react-native",
@@ -32,9 +32,9 @@
     "email": "sales@xpbrew.consulting"
   },
   "bugs": {
-    "url": "https://github.com/brodybits/react-native-sqlite-plugin-support-dev/issues"
+    "url": "https://github.com/brodybits/react-native-sqlite-plugin-legacy-support/issues"
   },
-  "homepage": "https://github.com/brodybits/react-native-sqlite-plugin-support-dev",
+  "homepage": "https://github.com/brodybits/react-native-sqlite-plugin-legacy-support",
   "license": "MIT",
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",

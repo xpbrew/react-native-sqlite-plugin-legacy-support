@@ -1,5 +1,7 @@
 # Changes
 
+###### react-native-sqlite-plugin-legacy-support 0.0.1-dev
+
 ###### react-native-sqlite-plugin-support-dev 0.0.1-dev
 
 - module package.json updates for React Native 0.59

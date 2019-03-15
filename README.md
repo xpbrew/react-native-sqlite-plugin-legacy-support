@@ -1,4 +1,4 @@
-# Cross-platform SQLite storage plugin for React Native - react-native-sqlite-plugin-support-dev version branch - known to be missing some needed components
+# Cross-platform SQLite storage plugin for React Native - react-native-sqlite-plugin-legacy-support version - known to be missing some needed components
 
 Native SQLite component with API based on HTML5/[Web SQL (DRAFT) API](http://www.w3.org/TR/webdatabase/) for the following platforms:
 - Android
@@ -25,11 +25,11 @@ The primary author and maintainer [@brodybits (Chris Brody)](https://github.com/
 
 # Getting started on React Native
 
-`$ npm install react-native-sqlite-plugin-support-dev --save`
+`$ npm install react-native-sqlite-plugin-legacy-support --save`
 
 ### Mostly automatic installation
 
-`$ react-native link react-native-sqlite-plugin-support-dev`
+`$ react-native link react-native-sqlite-plugin-legacy-support`
 
 ### Manual installation
 
@@ -38,7 +38,7 @@ NOTE THAT MANUAL INSTALLATION OF THIS REACT NATIVE MODULE IS NOT TESTED AND NOT 
 #### iOS
 
 1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-2. Go to `node_modules` ➜ `react-native-sqlite-plugin-support-dev` and add `SQLiteSupport.xcodeproj`
+2. Go to `node_modules` ➜ `react-native-sqlite-plugin-legacy-support` and add `SQLiteSupport.xcodeproj`
 3. In XCode, in the project navigator, select your project. Add `libSQLiteSupport.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 4. Run your project (`Cmd+R`)<
 
@@ -49,22 +49,20 @@ NOTE THAT MANUAL INSTALLATION OF THIS REACT NATIVE MODULE IS NOT TESTED AND NOT 
   - Add `new SQLiteSupportPackage()` to the list returned by the `getPackages()` method
 
 2. Append the following lines to `android/settings.gradle`:
-
 ```
-include ':react-native-sqlite-plugin-support-dev'
-project(':react-native-sqlite-plugin-support-dev').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sqlite-plugin-support-dev/android')
+include ':react-native-sqlite-plugin-legacy-support'
+project(':react-native-sqlite-plugin-legacy-support').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-sqlite-plugin-legacy-support/android')
 ```
 
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
-
 ```
-compile project(':react-native-sqlite-plugin-support-dev')
+compile project(':react-native-sqlite-plugin-legacy-support')
 ```
 
 # Usage
 
 ```javascript
-import sqlitePlugin from 'react-native-sqlite-plugin-support-dev';
+import sqlitePlugin from 'react-native-sqlite-plugin-legacy-support';
 
 const db = sqlitePlugin.openDatabase({name:'demo.db', location: 'default'});
 
