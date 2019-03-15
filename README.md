@@ -157,11 +157,9 @@ const styles = StyleSheet.create({
 })
 ```
 
-# Original documentation from Cordova
+# Original documentation based on Cordova plugin
 
 **IMPORTANT NOTICE:** On React Native the `sqlitePlugin` object must be imported as documented above and used instead of `window.sqlitePlugin`. And there is no `deviceready` event to wait for on React Native.
-
-DOC TODO: UPDATE DOCUMENTATION BELOW TO REFLECT CORRECT IMPORT AND USE OF THE CORRECT API OBJECT AND NO DEVICE READY EVENT
 
 ## NEW MAJOR RELEASE Coming with BREAKING CHANGES
 
@@ -202,7 +200,8 @@ This plugin uses a non-standard [Android-sqlite-connector](https://github.com/li
 The workaround is to use the `androidDatabaseProvider: 'system'` setting as described in the [Android database provider](#android-database-provider) section below:
 
 ```js
-var db = window.sqlitePlugin.openDatabase({
+// must import sqlitePlugin as described above
+var db = sqlitePlugin.openDatabase({
   name: 'my.db',
   location: 'default',
   androidDatabaseProvider: 'system'
@@ -241,10 +240,12 @@ For more information:
 To open a database:
 
 ```Javascript
+// must import sqlitePlugin as described above
+
 var db = null;
 
 document.addEventListener('deviceready', function() {
-  db = window.sqlitePlugin.openDatabase({
+  db = sqlitePlugin.openDatabase({
     name: 'my.db',
     location: 'default',
   });
@@ -435,7 +436,7 @@ See the [Sample section](#sample) for a sample with a more detailed explanation 
 
 ## Highlights
 
-- Drop-in replacement for HTML5/[Web SQL (DRAFT) API](http://www.w3.org/TR/webdatabase/): the only change should be to replace the static `window.openDatabase()` factory call with `window.sqlitePlugin.openDatabase()`, with parameters as documented below. Known deviations are documented in the [deviations section](#deviations) below.
+- Drop-in replacement for HTML5/[Web SQL (DRAFT) API](http://www.w3.org/TR/webdatabase/): the only change should be to replace the static `window.openDatabase()` factory call with `sqlitePlugin.openDatabase()`, with parameters as documented below. Known deviations are documented in the [deviations section](#deviations) below.
 - Failure-safe nested transactions with batch processing optimizations (according to HTML5/[Web SQL (DRAFT) API](http://www.w3.org/TR/webdatabase/))
 - Transaction API (based on HTML5/[Web SQL (DRAFT) API](http://www.w3.org/TR/webdatabase/)) is designed for maximum flexiblibility, does not allow any transactions to be left hanging open.
 - As described in [this posting](http://brodyspark.blogspot.com/2012/12/cordovaphonegap-sqlite-plugins-offer.html):
@@ -489,7 +490,7 @@ As stated above the browser platform will supported with features such as number
 
 ```js
 if (window.cordova.platformId === 'browser') db = window.openDatabase('MyDatabase', '1.0', 'Data', 2*1024*1024);
-else db = window.sqlitePlugin.openDatabase({name: 'MyDatabase.db', location: 'default'});
+else db = sqlitePlugin.openDatabase({name: 'MyDatabase.db', location: 'default'});
 ```
 
 or more compactly:
@@ -497,7 +498,7 @@ or more compactly:
 ```js
 db = (window.cordova.platformId === 'browser') ?
   window.openDatabase('MyDatabase', '1.0', 'Data', 2*1024*1024) :
-  window.sqlitePlugin.openDatabase({name: 'MyDatabase.db', location: 'default'});
+  sqlitePlugin.openDatabase({name: 'MyDatabase.db', location: 'default'});
 ```
 
 (lower limit needed to avoid extra permission request popup on Safari)
@@ -560,18 +561,22 @@ Try the following programs to verify successful installation and operation:
 **Echo test** - verify successful installation and build:
 
 ```js
-document.addEventListener('deviceready', function() {
-  window.sqlitePlugin.echoTest(function() {
+// must import sqlitePlugin as described above
+
+// document.addEventListener('deviceready', function() {
+  sqlitePlugin.echoTest(function() {
     console.log('ECHO test OK');
   });
-});
+// });
 ```
 
 **Self test** - automatically verify basic database access operations including opening a database; basic CRUD operations (create data in a table, read the data from the table, update the data, and delete the data); close and delete the database:
 
 ```js
-document.addEventListener('deviceready', function() {
-  window.sqlitePlugin.selfTest(function() {
+// must import sqlitePlugin as described above
+
+/* document.addEventListener('deviceready', function() */ {
+  sqlitePlugin.selfTest(function() {
     console.log('SELF test OK');
   });
 });
@@ -584,8 +589,10 @@ document.addEventListener('deviceready', function() {
 This test verifies that you can open a database, execute a basic SQL statement, and get the results (should be `TEST STRING`):
 
 ```js
-document.addEventListener('deviceready', function() {
-  var db = window.sqlitePlugin.openDatabase({name: 'test.db', location: 'default'});
+// must import sqlitePlugin as described above
+
+/* document.addEventListener('deviceready', function() */ {
+  var db = sqlitePlugin.openDatabase({name: 'test.db', location: 'default'});
   db.transaction(function(tr) {
     tr.executeSql("SELECT upper('Test string') AS upperString", [], function(tr, rs) {
       console.log('Got upperString result: ' + rs.rows.item(0).upperString);
@@ -597,8 +604,10 @@ document.addEventListener('deviceready', function() {
 Here is a variation that uses a SQL parameter instead of a string literal:
 
 ```js
-document.addEventListener('deviceready', function() {
-  var db = window.sqlitePlugin.openDatabase({name: 'test.db', location: 'default'});
+// must import sqlitePlugin as described above
+
+/* document.addEventListener('deviceready', function() */ {
+  var db = sqlitePlugin.openDatabase({name: 'test.db', location: 'default'});
   db.transaction(function(tr) {
     tr.executeSql('SELECT upper(?) AS upperString', ['Test string'], function(tr, rs) {
       console.log('Got upperString result: ' + rs.rows.item(0).upperString);
@@ -680,7 +689,7 @@ As "strongly recommended" by [Web SQL Database API 8.5 SQL injection](https://ww
 
 ### Some known deviations from the Web SQL database standard
 
-- The `window.sqlitePlugin.openDatabase` static factory call takes a different set of parameters than the standard Web SQL `window.openDatabase` static factory call. In case you have to use existing Web SQL code with no modifications please see the **Web SQL replacement tip** below.
+- The `sqlitePlugin.openDatabase` static factory call takes a different set of parameters than the standard Web SQL `window.openDatabase` static factory call. In case you have to use existing Web SQL code with no modifications please see the **Web SQL replacement tip** below.
 - This plugin does *not* support the database creation callback or standard database versions. Please read the **Database schema versions** section below for tips on how to support database schema versioning.
 - This plugin does *not* support the synchronous Web SQL interfaces.
 - Known issues with handling of certain ASCII/UNICODE characters as described below.
@@ -749,7 +758,7 @@ Some additional issues are tracked in [open cordova-sqlite-storage bug-general i
 - This plugin will not work before the callback for the 'deviceready' event has been fired, as described in **Usage**. (This is consistent with the other Cordova plugins.)
 - Extremely large records are not supported by this plugin. It is recommended to store images and similar binary data in separate files. TBD: specify maximum record. For future consideration: support in a plugin version such as [litehelpers / Cordova-sqlite-evcore-extbuild-free](https://github.com/litehelpers/Cordova-sqlite-evcore-extbuild-free) (GPL or commercial license terms).
 - This plugin version will not work within a web worker (not properly supported by the Cordova framework). Use within a web worker is supported for Android/iOS/macOS in [litehelpers / cordova-sqlite-evmax-ext-workers-legacy-build-free](https://github.com/litehelpers/cordova-sqlite-evmax-ext-workers-legacy-build-free) (GPL or special premium commercial license terms).
-- In-memory database `db=window.sqlitePlugin.openDatabase({name: ':memory:', ...})` is currently not supported.
+- In-memory database `db=sqlitePlugin.openDatabase({name: ':memory:', ...})` is currently not supported.
 - The Android platform version cannot properly support more than 100 open database files due to the threading model used.
 - SQL error messages reported by Windows platform version are not consistent with Android/iOS/macOS platform versions.
 - UNICODE `\u2028` (line separator) and `\u2029` (paragraph separator) characters are currently not supported and known to be broken on iOS, macOS, and Android platform versions due to JSON issues reported in [Cordova bug CB-9435](https://issues.apache.org/jira/browse/CB-9435) and [cordova/cordova-discuss#57](https://github.com/cordova/cordova-discuss/issues/57). This is fixed with a workaround for iOS/macOS in: [litehelpers / Cordova-sqlite-evplus-legacy-free](https://github.com/litehelpers/Cordova-sqlite-evplus-legacy-free) and [litehelpers / Cordova-sqlite-evplus-legacy-attach-detach-free](https://github.com/litehelpers/Cordova-sqlite-evplus-legacy-attach-detach-free) (GPL or special commercial license terms) as well as [litehelpers / cordova-sqlite-evmax-ext-workers-legacy-build-free](https://github.com/litehelpers/cordova-sqlite-evmax-ext-workers-legacy-build-free) (GPL or premium commercial license terms).
@@ -767,7 +776,7 @@ Some additional issues are tracked in [open cordova-sqlite-storage bug-general i
 - WITH clause is not supported on some older Android platform versions in case the `androidDatabaseProvider: 'system'` setting is used.
 - User-defined savepoints are not supported and not expected to be compatible with the transaction locking mechanism used by this plugin. In addition, the use of BEGIN/COMMIT/ROLLBACK statements is not supported.
 - Issues have been reported with using this plugin together with Crosswalk for Android, especially on `x86_64` CPU ([xpbrew/cordova-sqlite-storage#336](https://github.com/xpbrew/cordova-sqlite-storage/issues/336)). Please see [xpbrew/cordova-sqlite-storage#336 (comment)](https://github.com/xpbrew/cordova-sqlite-storage/issues/336#issuecomment-364752652) for workaround on x64 CPU. In addition it may be helpful to install Crosswalk as a plugin instead of using Crosswalk to create a project that will use this plugin.
-- Does not work with [axemclion / react-native-cordova-plugin](https://github.com/axemclion/react-native-cordova-plugin) since the `window.sqlitePlugin` object is NOT properly exported (ES5 feature). It is recommended to use [andpor / react-native-sqlite-storage](https://github.com/andpor/react-native-sqlite-storage) for SQLite database access with React Native Android/iOS instead.
+- Does not work with [axemclion / react-native-cordova-plugin](https://github.com/axemclion/react-native-cordova-plugin) since the `sqlitePlugin` object is NOT properly exported (ES5 feature). It is recommended to use [andpor / react-native-sqlite-storage](https://github.com/andpor/react-native-sqlite-storage) for SQLite database access with React Native Android/iOS instead.
 - Does not support named parameters (`?NNN`/`:AAA`/`@AAAA`/`$AAAA` parameter placeholders as documented in <https://www.sqlite.org/lang_expr.html#varparam> and <https://www.sqlite.org/c3ref/bind_blob.html>) ref: [xpbrew/cordova-sqlite-storage#717](https://github.com/xpbrew/cordova-sqlite-storage/issues/717)
 - User defined functions not supported, due to problems described in [xpbrew/cordova-sqlite-storage#741](https://github.com/xpbrew/cordova-sqlite-storage/issues/741)
 
@@ -950,20 +959,24 @@ FUTURE TBD: Proper date/time handling will be further tested and documented at s
 To verify that both the Javascript and native part of this plugin are installed in your application:
 
 ```js
-window.sqlitePlugin.echoTest(successCallback, errorCallback);
+// must import sqlitePlugin as described above
+
+sqlitePlugin.echoTest(successCallback, errorCallback);
 ```
 
 To verify that this plugin is able to open a database (named `___$$$___litehelpers___$$$___test___$$$___.db`), execute the CRUD (create, read, update, and delete) operations, and clean it up properly:
 
 ```js
-window.sqlitePlugin.selfTest(successCallback, errorCallback);
+// must import sqlitePlugin as described above
+
+sqlitePlugin.selfTest(successCallback, errorCallback);
 ```
 
 **IMPORTANT:** Please wait for the 'deviceready' event (see below for an example).
 
 ## General
 
-- Drop-in replacement for HTML5/[Web SQL (DRAFT) API](http://www.w3.org/TR/webdatabase/): the only change should be to replace the static `window.openDatabase()` factory call with `window.sqlitePlugin.openDatabase()`, with parameters as documented below. Some other known deviations are described throughout this document. Reports of any other deviations would be appreciated.
+- Drop-in replacement for HTML5/[Web SQL (DRAFT) API](http://www.w3.org/TR/webdatabase/): the only change should be to replace the static `window.openDatabase()` factory call with `sqlitePlugin.openDatabase()`, with parameters as documented below. Some other known deviations are described throughout this document. Reports of any other deviations would be appreciated.
 - Single-page application design is recommended.
 - In case of a multi-page application the JavaScript used by each page must use `sqlitePlugin.openDatabase` to open the database access handle object before it can access the data.
 
@@ -976,7 +989,8 @@ See the [Sample section](#sample) for a sample with detailed explanations.
 To open a database access handle object (in the **new** default location):
 
 ```js
-var db = window.sqlitePlugin.openDatabase({name: 'my.db', location: 'default'}, successcb, errorcb);
+// must import sqlitePlugin as described above
+var db = sqlitePlugin.openDatabase({name: 'my.db', location: 'default'}, successcb, errorcb);
 ```
 
 **WARNING:** The new "default" location value is different from the old default location used until March 2016 and would break an upgrade for an app that was using the old default setting (`location: 0`, same as using `iosDatabaseLocation: 'Documents'`) on iOS. The recommended solution is to continue to open the database from the same location, using `iosDatabaseLocation: 'Documents'`.
@@ -986,7 +1000,8 @@ var db = window.sqlitePlugin.openDatabase({name: 'my.db', location: 'default'}, 
 To specify a different location (affects iOS/macOS *only*):
 
 ```js
-var db = window.sqlitePlugin.openDatabase({name: 'my.db', iosDatabaseLocation: 'Library'}, successcb, errorcb);
+// must import sqlitePlugin as described above
+var db = sqlitePlugin.openDatabase({name: 'my.db', iosDatabaseLocation: 'Library'}, successcb, errorcb);
 ```
 
 where the `iosDatabaseLocation` option may be set to one of the following choices:
@@ -997,15 +1012,16 @@ where the `iosDatabaseLocation` option may be set to one of the following choice
 **WARNING:** Again, the new "default" iosDatabaseLocation value is *NOT* the same as the old default location and would break an upgrade for an app using the old default value (0) on iOS.
 
 DEPRECATED ALTERNATIVE to be removed in September 2018:
-- `var db = window.sqlitePlugin.openDatabase({name: "my.db", location: 1}, successcb, errorcb);`
+- `var db = sqlitePlugin.openDatabase({name: "my.db", location: 1}, successcb, errorcb);`
 
 with the `location` option set to one the following choices (affects iOS *only*):
 - `0` ~~(default)~~: `Documents` - visible to iTunes and backed up by iCloud
 - `1`: `Library` - backed up by iCloud, *NOT* visible to iTunes
 - `2`: `Library/LocalDatabase` - *NOT* visible to iTunes and *NOT* backed up by iCloud (same as using "default")
 
-No longer supported (see tip below to overwrite `window.openDatabase`): ~~`var db = window.sqlitePlugin.openDatabase("myDatabase.db", "1.0", "Demo", -1);`~~
+No longer supported (see tip below to overwrite `window.openDatabase`): ~~`var db = sqlitePlugin.openDatabase("myDatabase.db", "1.0", "Demo", -1);`~~
 
+<!-- does not apply for React Native:
 **IMPORTANT:** Please wait for the 'deviceready' event, as in the following example:
 
 ```js
@@ -1014,15 +1030,17 @@ document.addEventListener('deviceready', onDeviceReady, false);
 
 // Cordova is ready
 function onDeviceReady() {
-  var db = window.sqlitePlugin.openDatabase({name: 'my.db', location: 'default'});
+  var db = sqlitePlugin.openDatabase({name: 'my.db', location: 'default'});
   // ...
 }
 ```
+-- >
 
 The successcb and errorcb callback parameters are optional but can be extremely helpful in case anything goes wrong. For example:
 
 ```js
-window.sqlitePlugin.openDatabase({name: 'my.db', location: 'default'}, function(db) {
+// must import sqlitePlugin as described above
+sqlitePlugin.openDatabase({name: 'my.db', location: 'default'}, function(db) {
   db.transaction(function(tx) {
     // ...
   }, function(err) {
@@ -1045,18 +1063,20 @@ If any sql statements or transactions are attempted on a database object before 
 - It is possible to open multiple database access handle objects for the same database.
 - The database handle access object can be closed as described below.
 
+<!-- does not apply for React Native:
 **Web SQL replacement tip:**
 
 To overwrite `window.openDatabase`:
 
 ```Javascript
 window.openDatabase = function(dbname, ignored1, ignored2, ignored3) {
-  return window.sqlitePlugin.openDatabase({
+  return sqlitePlugin.openDatabase({
     name: dbname,
     location: 'default'
   });
 };
 ```
+-->
 
 ### iCloud backup notes
 
@@ -1092,7 +1112,8 @@ Use the `location` or `iosDatabaseLocation` option in `sqlitePlugin.openDatabase
 By default, this plugin uses [Android-sqlite-connector](https://github.com/liteglue/Android-sqlite-connector), which is lightweight and should be more efficient than the Android system database provider. To use the built-in Android system database provider implementation instead:
 
 ```js
-var db = window.sqlitePlugin.openDatabase({
+// must import sqlitePlugin as described above
+var db = sqlitePlugin.openDatabase({
   name: 'my.db',
   location: 'default',
   androidDatabaseProvider: 'system'
@@ -1120,7 +1141,8 @@ This is *not* an issue when the default [Android-sqlite-connector](https://githu
 There is an optional workaround that simply closes and reopens the database file at the end of every transaction that is committed. The workaround is enabled by opening the database with options as follows:
 
 ```js
-var db = window.sqlitePlugin.openDatabase({
+// must import sqlitePlugin as described above
+var db = sqlitePlugin.openDatabase({
   name: 'my.db',
   location: 'default',
   androidDatabaseProvider: 'system'
@@ -1290,7 +1312,7 @@ db.readTransaction(function(tx) {
 
 ```Javascript
   // BROKEN SAMPLE:
-  var db = window.sqlitePlugin.openDatabase({name: 'my.db', location: 'default'});
+  var db = sqlitePlugin.openDatabase({name: 'my.db', location: 'default'});
   db.executeSql("DROP TABLE IF EXISTS tt");
   db.executeSql("CREATE TABLE tt (data)");
 
@@ -1349,12 +1371,15 @@ The threading model depends on which platform version is used:
 Creates a table, adds a single entry, then queries the count to check if the item was inserted as expected. Note that a new transaction is created in the middle of the first callback.
 
 ```js
+// must import sqlitePlugin as described above
+
+// not needed for React Native:
 // Wait for Cordova to load
 document.addEventListener('deviceready', onDeviceReady, false);
 
 // Cordova is ready
-function onDeviceReady() {
-  var db = window.sqlitePlugin.openDatabase({name: 'my.db', location: 'default'});
+/* function onDeviceReady() */ {
+  var db = sqlitePlugin.openDatabase({name: 'my.db', location: 'default'});
 
   db.transaction(function(tx) {
     tx.executeSql('DROP TABLE IF EXISTS test_table');
@@ -1392,12 +1417,15 @@ function onDeviceReady() {
 In this case, the same transaction in the first executeSql() callback is being reused to run executeSql() again.
 
 ```js
+// must import sqlitePlugin as described above
+
+// not needed for React Native:
 // Wait for Cordova to load
 document.addEventListener('deviceready', onDeviceReady, false);
 
 // Cordova is ready
-function onDeviceReady() {
-  var db = window.sqlitePlugin.openDatabase({name: 'my.db', location: 'default'});
+/* function onDeviceReady() */ {
+  var db = sqlitePlugin.openDatabase({name: 'my.db', location: 'default'});
 
   db.transaction(function(tx) {
     tx.executeSql('DROP TABLE IF EXISTS test_table');
@@ -1419,7 +1447,7 @@ function onDeviceReady() {
 }
 ```
 
-This case will also works with Safari (WebKit), assuming you replace `window.sqlitePlugin.openDatabase` with `window.openDatabase`.
+This case will also works with Safari (WebKit), assuming you replace `sqlitePlugin.openDatabase` with `window.openDatabase`.
 
 <!-- END Sample with transaction-level nesting -->
 
@@ -1498,7 +1526,8 @@ db.executeSql("SELECT LENGTH('tenletters') AS stringlength", [], function (res) 
 ## Delete a database
 
 ```js
-window.sqlitePlugin.deleteDatabase({name: 'my.db', location: 'default'}, successcb, errorcb);
+// must import sqlitePlugin as described above
+sqlitePlugin.deleteDatabase({name: 'my.db', location: 'default'}, successcb, errorcb);
 ```
 
 with `location` or `iosDatabaseLocation` parameter *required* as described above for `openDatabase` (affects iOS/macOS *only*)
@@ -1612,14 +1641,16 @@ This plugin can be challenging to use on Windows since it includes a native SQLi
 
 ### Easy installation test
 
-Use `window.sqlitePlugin.echoTest` and/or `window.sqlitePlugin.selfTest` as described above (please wait for the `deviceready` event).
+Use `sqlitePlugin.echoTest` and/or `sqlitePlugin.selfTest` as described above (please wait for the `deviceready` event).
 
 ### Quick installation test
 
 Assuming your app has a recent template as used by the Cordova create script, add the following code to the `onDeviceReady` function, after `app.receivedEvent('deviceready');`:
 
 ```Javascript
-  window.sqlitePlugin.openDatabase({ name: 'hello-world.db', location: 'default' }, function (db) {
+  // must import sqlitePlugin as described above
+
+  sqlitePlugin.openDatabase({ name: 'hello-world.db', location: 'default' }, function (db) {
     db.executeSql("select length('tenletters') as stringlength", [], function (res) {
       var stringlength = res.rows.item(0).stringlength;
       console.log('got stringlength: ' + stringlength);
@@ -1768,7 +1799,9 @@ The SQLite storage plugin sample allows you to execute SQL statements to interac
 Call the `openDatabase()` function to get started, passing in the name and location for the database.
 
 ```Javascript
-var db = window.sqlitePlugin.openDatabase({ name: 'my.db', location: 'default' }, function (db) {
+// must import sqlitePlugin as described above
+
+var db = sqlitePlugin.openDatabase({ name: 'my.db', location: 'default' }, function (db) {
 
     // Here, you might create or open the table.
 
