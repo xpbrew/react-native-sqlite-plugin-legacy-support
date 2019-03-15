@@ -8,6 +8,8 @@
     "postinstall": "node ../scripts/examples_postinstall.js"
   },
   "dependencies": {
+    "react": "16.8.3",
+    "react-native": "0.59.1",
     "react-native-sqlite-plugin-support": "file:../"
   },
   "devDependencies": {}
