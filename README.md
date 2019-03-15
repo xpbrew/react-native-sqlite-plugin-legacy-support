@@ -1,12 +1,17 @@
-# Cross-platform SQLite storage plugin for Cordova/PhoneGap - cordova-sqlite-storage plugin version
+# Cross-platform SQLite storage plugin for React Native - react-native-sqlite-plugin-support-dev version branch - known to be missing some needed components
 
 Native SQLite component with API based on HTML5/[Web SQL (DRAFT) API](http://www.w3.org/TR/webdatabase/) for the following platforms:
 - Android
 - iOS
+
+Platforms not supported by this version branch:
+
 - macOS ("osx" platform)
 - Windows 10 (UWP) DESKTOP and MOBILE (see below for major limitations)
 
+<!-- FUTURE TBD:
 Browser platform is currently supported with some limitations as described in [browser platform usage notes](#browser-platform-usage-notes) section below, will be supported with more features such as numbered parameters and SQL batch API in the near future.
+- -->
 
 **LICENSE:** MIT (see [LICENSE.md](./LICENSE.md) for details, including third-party components used by this plugin)
 
@@ -15,6 +20,69 @@ __WARNING: Multiple SQLite problem on all platforms__ _with possible corruption 
 # FREE CONSULTING SPECIAL
 
 The primary author and maintainer [@brodybits (Chris Brody)](https://github.com/brodybits) is happy to offer free consulting for a limited time period - please see <https://xpbrew.consulting> for more information.
+
+<!-- Installation & usage instructions as generated: -->
+
+# Getting started on React Native
+
+`$ npm install react-native-sqlite-plugin-support-dev --save`
+
+### Mostly automatic installation
+
+`$ react-native link react-native-sqlite-plugin-support-dev`
+
+### Manual installation
+
+NOTE THAT MANUAL INSTALLATION OF THIS REACT NATIVE MODULE IS NOT TESTED AND NOT SUPPORTED.
+
+#### iOS
+
+1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
+2. Go to `node_modules` ➜ `react-native-sqlite-plugin-support-dev` and add `SQLiteSupport.xcodeproj`
+3. In XCode, in the project navigator, select your project. Add `libSQLiteSupport.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
+4. Run your project (`Cmd+R`)<
+
+#### Android
+
+1. Open up `android/app/src/main/java/[...]/MainApplication.java`
+  - Add `import io.sqlc.SQLiteSupportPackage;` to the imports at the top of the file
+  - Add `new SQLiteSupportPackage()` to the list returned by the `getPackages()` method
+
+2. Append the following lines to `android/settings.gradle`:
+
+```
+include ':react-native-sqlite-plugin-support-dev'
+project(':react-native-sqlite-plugin-support-dev').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sqlite-plugin-support-dev/android')
+```
+
+3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
+
+```
+compile project(':react-native-sqlite-plugin-support-dev')
+```
+
+# Usage
+
+```javascript
+import sqlitePlugin from 'react-native-sqlite-plugin-support-dev';
+
+const db = sqlitePlugin.openDatabase({name:'demo.db', location: 'default'});
+
+db.transaction((tx) => {
+  tx.executeSql('SELECT UPPER(?) as upperText', ['Some ASCII text'], (tx, rs) => {
+    this.setState({
+      ...this.state,
+      upperText: rs.rows.item(0).upperText
+    });
+  });
+});
+```
+
+# Original documentation from Cordova
+
+**IMPORTANT NOTICE:** On React Native the `sqlitePlugin` object must be imported as documented above and used instead of `window.sqlitePlugin`. And there is no `deviceready` event to wait for on React Native.
+
+DOC TODO: UPDATE DOCUMENTATION BELOW TO REFLECT CORRECT IMPORT AND USE OF THE CORRECT API OBJECT AND NO DEVICE READY EVENT
 
 ## NEW MAJOR RELEASE Coming with BREAKING CHANGES
 

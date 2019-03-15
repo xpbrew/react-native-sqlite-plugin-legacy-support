@@ -1,7 +1,7 @@
 (function() {
-  var DB_STATE_INIT, DB_STATE_OPEN, READ_ONLY_REGEX, SQLiteFactory, SQLitePluginObject, SQLitePluginTransaction, SQLiteProxy, SelfTest, argsArray, dblocations, getProxyFunction, iosLocationMap, newSQLError, nextTick, root, sqlitePlugin, txLocks;
+  var DB_STATE_INIT, DB_STATE_OPEN, READ_ONLY_REGEX, SQLiteFactory, SQLitePluginObject, SQLitePluginTransaction, SQLiteProxy, SQLiteSupport, SelfTest, argsArray, dblocations, getProxyFunction, iosLocationMap, newSQLError, nextTick, sqlitePlugin, txLocks;
 
-  root = this;
+  SQLiteSupport = require('./SQLiteSupport.js')["default"];
 
   READ_ONLY_REGEX = /^(\s|;)*(?:alter|create|delete|drop|insert|reindex|replace|update)/i;
 
@@ -64,7 +64,7 @@
 
   getProxyFunction = function(methodName) {
     return function(argsArray, successCallback, errorCallback) {
-      return cordova.exec(successCallback, errorCallback, 'SQLitePlugin', methodName, argsArray);
+      SQLiteSupport[methodName](argsArray, successCallback, errorCallback || function() {});
     };
   };
 
@@ -924,9 +924,10 @@
     },
     selfTest: SelfTest.start,
     openDatabase: SQLiteFactory.openDatabase,
-    deleteDatabase: SQLiteFactory.deleteDatabase
+    deleteDatabase: SQLiteFactory.deleteDatabase,
+    sampleMethod: SQLiteSupport.sampleMethod
   };
 
-  root.sqlitePlugin = sqlitePlugin;
+  module.exports = sqlitePlugin;
 
 }).call(this);

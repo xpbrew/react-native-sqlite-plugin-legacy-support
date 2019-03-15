@@ -6,9 +6,9 @@
 
 # Top-level SQLite plugin objects
 
-## root window object:
+## imported exec utility object:
 
-    root = @
+    SQLiteSupport = require('./SQLiteSupport.js').default
 
 ## constant(s):
 
@@ -79,7 +79,8 @@
 
     getProxyFunction = (methodName) ->
       (argsArray, successCallback, errorCallback) ->
-        cordova.exec successCallback, errorCallback, 'SQLitePlugin', methodName, argsArray
+        SQLiteSupport[methodName] argsArray, successCallback, errorCallback || -> return
+        return
 
     SQLiteProxy =
       echoStringValue: getProxyFunction 'echoStringValue'
@@ -1043,7 +1044,10 @@
       openDatabase: SQLiteFactory.openDatabase
       deleteDatabase: SQLiteFactory.deleteDatabase
 
-    root.sqlitePlugin = sqlitePlugin
+      # keep for initial testing purposes
+      sampleMethod: SQLiteSupport.sampleMethod
+
+    module.exports = sqlitePlugin
 
 ## vim directives
 

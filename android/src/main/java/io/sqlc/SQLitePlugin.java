@@ -6,6 +6,8 @@
 
 package io.sqlc;
 
+import android.content.Context;
+
 import android.util.Log;
 
 import java.io.File;
@@ -18,14 +20,14 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaPlugin;
+// import org.apache.cordova.CallbackContext;
+// import org.apache.cordova.CordovaPlugin;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SQLitePlugin extends CordovaPlugin {
+public class SQLitePlugin /* extends CordovaPlugin */ {
 
     /**
      * Concurrent database runner map.
@@ -44,6 +46,10 @@ public class SQLitePlugin extends CordovaPlugin {
      */
     private Map<String, DBRunner> dbrmap = new ConcurrentHashMap<String, DBRunner>();
 
+    private final Context c;
+
+    SQLitePlugin(Context ac) { this.c = ac; }
+
     /**
      * NOTE: Using default constructor, no explicit constructor.
      */
@@ -56,7 +62,7 @@ public class SQLitePlugin extends CordovaPlugin {
      * @param cbc    Callback context from Cordova API
      * @return       Whether the action was valid.
      */
-    @Override
+    // @Override
     public boolean execute(String actionAsString, JSONArray args, CallbackContext cbc) {
 
         Action action;
@@ -157,7 +163,7 @@ public class SQLitePlugin extends CordovaPlugin {
     /**
      * Clean up and close all open databases.
      */
-    @Override
+    // @Override
     public void onDestroy() {
         while (!dbrmap.isEmpty()) {
             String dbname = dbrmap.keySet().iterator().next();
@@ -188,7 +194,8 @@ public class SQLitePlugin extends CordovaPlugin {
         } else {
             r = new DBRunner(dbname, options, cbc);
             dbrmap.put(dbname, r);
-            this.cordova.getThreadPool().execute(r);
+            // this.cordova.getThreadPool().execute(r);
+            new Thread(r).start();
         }
     }
     /**
@@ -201,7 +208,7 @@ public class SQLitePlugin extends CordovaPlugin {
             // ASSUMPTION: no db (connection/handle) is already stored in the map
             // [should be true according to the code in DBRunner.run()]
 
-            File dbfile = this.cordova.getActivity().getDatabasePath(dbname);
+            File dbfile = this.c.getDatabasePath(dbname);
 
             if (!dbfile.exists()) {
                 dbfile.getParentFile().mkdirs();
@@ -291,10 +298,10 @@ public class SQLitePlugin extends CordovaPlugin {
      * @return true if successful or false if an exception was encountered
      */
     private boolean deleteDatabaseNow(String dbname) {
-        File dbfile = this.cordova.getActivity().getDatabasePath(dbname);
+        File dbfile = this.c.getDatabasePath(dbname);
 
         try {
-            return cordova.getActivity().deleteDatabase(dbfile.getAbsolutePath());
+            return c.deleteDatabase(dbfile.getAbsolutePath());
         } catch (Exception e) {
             Log.e(SQLitePlugin.class.getSimpleName(), "couldn't delete database", e);
             return false;

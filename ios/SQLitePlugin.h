@@ -6,7 +6,9 @@
  * See http://opensource.org/licenses/alphabetical for full text.
  */
 
-#import <Cordova/CDVPlugin.h>
+// #import <Cordova/CDVPlugin.h>
+
+#import <Foundation/Foundation.h>
 
 // Used to remove dependency on sqlite3.h in this header:
 struct sqlite3;
@@ -23,28 +25,42 @@ enum WebSQLError {
 };
 typedef int WebSQLError;
 
-@interface SQLitePlugin : CDVPlugin {
+@interface SQLitePlugin : NSObject {
     NSMutableDictionary *openDBs;
 }
 
 @property (nonatomic, copy) NSMutableDictionary *openDBs;
 @property (nonatomic, copy) NSMutableDictionary *appDBPaths;
 
+-(void) pluginInitialize;
+
 // Self-test
--(void) echoStringValue: (CDVInvokedUrlCommand*)command;
+-(void) echoIt: (NSArray *)arguments
+         error: (void (^)(NSObject *))error
+       success: (void (^)(NSObject *))success;
 
 // Open / Close / Delete
--(void) open: (CDVInvokedUrlCommand*)command;
--(void) close: (CDVInvokedUrlCommand*)command;
--(void) delete: (CDVInvokedUrlCommand*)command;
 
--(void) openNow: (CDVInvokedUrlCommand*)command;
--(void) closeNow: (CDVInvokedUrlCommand*)command;
--(void) deleteNow: (CDVInvokedUrlCommand*)command;
+-(void)openNow: (NSArray *)arguments
+         error: (void (^)(NSObject *))error
+       success: (void (^)())success;
+
+-(void)closeNow: (NSArray *)arguments
+          error: (void (^)(NSObject *))error
+        success: (void (^)())success;
+
+-(void)deleteNow: (NSArray *)arguments
+           error: (void (^)(NSObject *))error
+         success: (void (^)())success;
 
 // Batch processing interface
--(void) backgroundExecuteSqlBatch: (CDVInvokedUrlCommand*)command;
 
+-(void) executeSqlBatchNow: (NSArray *)arguments
+                     error: (void (^)(NSObject *))error
+                   success: (void (^)(NSObject *))success;
+
+#if 0
 -(void) executeSqlBatchNow: (CDVInvokedUrlCommand*)command;
+#endif
 
 @end /* vim: set expandtab : */
