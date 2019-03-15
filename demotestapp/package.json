@@ -12,5 +12,9 @@
     "react-native": "0.59.1",
     "react-native-sqlite-plugin-support": "file:../"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/runtime": "^7.3.4",
+    "metro-react-native-babel-preset": "^0.53.1"
+  }
 }
